@@ -160,14 +160,6 @@ class _CustomCameraState extends State<CustomCamera>
     CustomTheme.secondaryColor = widget.secondaryColor;
     CustomTheme.backgroundColor = widget.backgroundColor;
     // initialize the rear camera
-
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
     initCamera();
   }
 
@@ -191,11 +183,6 @@ class _CustomCameraState extends State<CustomCamera>
   void dispose() {
     // Dispose of the controller when the widget is disposed.
     controller?.dispose();
-
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
     super.dispose();
   }
 
@@ -209,6 +196,7 @@ class _CustomCameraState extends State<CustomCamera>
       return;
     }
     try {
+      lockDeviceOrientation();
       await cameraController.setFlashMode(FlashMode.off);
       XFile picture = await cameraController.takePicture();
       goToPreview(picture.path, false);
@@ -216,6 +204,17 @@ class _CustomCameraState extends State<CustomCamera>
       debugPrint('Error occurred while taking picture: $e');
       return;
     }
+  }
+
+  void lockDeviceOrientation() {
+    List<DeviceOrientation> deviceOrientation =
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
+            : [
+                DeviceOrientation.landscapeLeft,
+                DeviceOrientation.landscapeRight
+              ];
+    SystemChrome.setPreferredOrientations(deviceOrientation);
   }
 
   Future<void> startVideoRecording() async {
@@ -228,6 +227,7 @@ class _CustomCameraState extends State<CustomCamera>
       return;
     }
     try {
+      lockDeviceOrientation();
       await cameraController.startVideoRecording();
     } on CameraException catch (e) {
       debugPrint('Error occurred while starting to record video: $e');
@@ -291,7 +291,9 @@ class _CustomCameraState extends State<CustomCamera>
             ),
             OrientationBuilder(builder: (context, orientation) {
               return Align(
-                alignment: Alignment.topRight,
+                alignment: orientation == Orientation.portrait
+                    ? Alignment.topRight
+                    : Alignment.topLeft,
                 child: IconButton(
                   onPressed: () {
                     exitCallback() => {Navigator.of(context).pop()};
@@ -316,13 +318,18 @@ class _CustomCameraState extends State<CustomCamera>
             OrientationBuilder(
               builder: (context, orientation) {
                 return Align(
-                  alignment: Alignment.bottomCenter,
+                  alignment: orientation == Orientation.portrait
+                      ? Alignment.bottomCenter
+                      : Alignment.centerRight,
                   child: Container(
-                    height: 189.h,
+                    height: orientation == Orientation.portrait ? 189.h : null,
+                    width: orientation == Orientation.portrait ? null : 189.w,
                     decoration: BoxDecoration(
                         color: CustomTheme.backgroundColor.withOpacity(0.8)),
                     child: Flex(
-                      direction: Axis.horizontal,
+                      direction: orientation == Orientation.portrait
+                          ? Axis.horizontal
+                          : Axis.vertical,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _getVideoControls(),

@@ -28,11 +28,6 @@ class _CameraPreviewState extends State<CameraPreview> {
   void initState() {
     super.initState();
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
     // Create and store the VideoPlayerController. The VideoPlayerController
     // offers several different constructors to play videos from assets, files,
     // or the internet.
@@ -134,9 +129,16 @@ class _CameraPreviewState extends State<CameraPreview> {
           ),
           OrientationBuilder(builder: (context, orientation) {
             return Align(
-                alignment: Alignment.bottomCenter,
+                alignment: orientation == Orientation.portrait
+                    ? Alignment.bottomCenter
+                    : Alignment.centerRight,
                 child: Container(
-                  height: 189.h,
+                  height: orientation == Orientation.portrait
+                      ? 189.h
+                      : double.infinity,
+                  width: orientation == Orientation.portrait
+                      ? double.infinity
+                      : 189.w,
                   decoration: BoxDecoration(
                       color: CustomTheme.backgroundColor.withOpacity(0.8)),
                   child: Column(
