@@ -207,13 +207,10 @@ class _CustomCameraState extends State<CustomCamera>
   }
 
   void lockDeviceOrientation() {
-    List<DeviceOrientation> deviceOrientation =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
-            : [
-                DeviceOrientation.landscapeLeft,
-                DeviceOrientation.landscapeRight
-              ];
+    List<DeviceOrientation> deviceOrientation = [
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ];
     SystemChrome.setPreferredOrientations(deviceOrientation);
   }
 
