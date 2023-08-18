@@ -13,20 +13,25 @@ import 'src/camera_preview.dart' as camera_preview;
 export 'src/multimedia_item.dart' show MultimediaItem;
 
 class CustomCamera extends StatefulWidget {
-
   final Color primaryColor;
   final Color secondaryColor;
   final Color backgroundColor;
   final bool isRecordingEnabled;
 
-  const CustomCamera({Key? key, required this.primaryColor, required this.secondaryColor, required this.backgroundColor, this.isRecordingEnabled = false}) : super(key: key);
+  const CustomCamera(
+      {Key? key,
+      required this.primaryColor,
+      required this.secondaryColor,
+      required this.backgroundColor,
+      this.isRecordingEnabled = false})
+      : super(key: key);
 
   @override
   State<CustomCamera> createState() => _CustomCameraState();
 }
 
-class _CustomCameraState extends State<CustomCamera> with WidgetsBindingObserver {
-
+class _CustomCameraState extends State<CustomCamera>
+    with WidgetsBindingObserver {
   List<CameraDescription> cameras = <CameraDescription>[];
 
   CameraController? controller;
@@ -43,18 +48,25 @@ class _CustomCameraState extends State<CustomCamera> with WidgetsBindingObserver
   int _pointers = 0;
 
   Future<void> initCamera() async {
-    exitCallback() => { Navigator.of(context).pop() };
+    exitCallback() => {Navigator.of(context).pop()};
 
     // initialize cameras.
     try {
       cameras = await availableCameras();
-    }
-    on CameraException catch (e) {
-      CameraAlert exitAlert = CameraAlert(title: 'Ocurrió un error', description: 'No fue posible inicializar la cámara', positiveInput: 'Aceptar', negativeInput: '', positiveCallback: exitCallback);
-      showDialog(context: context, builder: (_) { return exitAlert; });
+    } on CameraException catch (e) {
+      CameraAlert exitAlert = CameraAlert(
+          title: 'Ocurrió un error',
+          description: 'No fue posible inicializar la cámara',
+          positiveInput: 'Aceptar',
+          negativeInput: '',
+          positiveCallback: exitCallback);
+      showDialog(
+          context: context,
+          builder: (_) {
+            return exitAlert;
+          });
       debugPrint("$e occurred while initializing the camera");
     }
-
 
     final CameraController? oldController = controller;
     if (oldController != null) {
@@ -67,7 +79,9 @@ class _CustomCameraState extends State<CustomCamera> with WidgetsBindingObserver
       await oldController.dispose();
     }
 
-    final CameraController cameraController = CameraController(cameras[0], ResolutionPreset.high, enableAudio: widget.isRecordingEnabled);
+    final CameraController cameraController = CameraController(
+        cameras[0], ResolutionPreset.high,
+        enableAudio: widget.isRecordingEnabled);
 
     controller = cameraController;
 
@@ -90,33 +104,48 @@ class _CustomCameraState extends State<CustomCamera> with WidgetsBindingObserver
       String errorDescription;
       switch (e.code) {
         case 'CameraAccessDenied':
-          errorDescription = 'Los permisos de cámara son necesarios para usar esta funcionalidad';
+          errorDescription =
+              'Los permisos de cámara son necesarios para usar esta funcionalidad';
           break;
         case 'CameraAccessDeniedWithoutPrompt':
           // iOS only
-          errorDescription = 'Por favor conceda los permisos de cámara desde la configuración de la aplicación';
+          errorDescription =
+              'Por favor conceda los permisos de cámara desde la configuración de la aplicación';
           break;
         case 'CameraAccessRestricted':
           // iOS only
           errorDescription = 'El acceso a la cámara se encuentra restringido';
           break;
         case 'AudioAccessDenied':
-          errorDescription = 'Los permisos de grabación de audio son necesarios para usar esta funcionalidad';
+          errorDescription =
+              'Los permisos de grabación de audio son necesarios para usar esta funcionalidad';
           break;
         case 'AudioAccessDeniedWithoutPrompt':
           // iOS only
-          errorDescription = 'Por favor conceda los permisos de grabación de audio desde la configuración de la aplicación';
+          errorDescription =
+              'Por favor conceda los permisos de grabación de audio desde la configuración de la aplicación';
           break;
         case 'AudioAccessRestricted':
           // iOS only
-          errorDescription = 'El acceso a la grabación de audio se encuentra restringido';
+          errorDescription =
+              'El acceso a la grabación de audio se encuentra restringido';
           break;
         default:
           errorDescription = 'No fue posible inicializar la cámara';
           break;
       }
-      CameraAlert exitAlert = CameraAlert(title: 'Ocurrió un error', description: errorDescription, positiveInput: 'Aceptar', negativeInput: '', positiveCallback: exitCallback);
-      if (mounted) showDialog(context: context, builder: (_) { return exitAlert; });
+      CameraAlert exitAlert = CameraAlert(
+          title: 'Ocurrió un error',
+          description: errorDescription,
+          positiveInput: 'Aceptar',
+          negativeInput: '',
+          positiveCallback: exitCallback);
+      if (mounted)
+        showDialog(
+            context: context,
+            builder: (_) {
+              return exitAlert;
+            });
     }
 
     if (mounted) {
@@ -160,35 +189,47 @@ class _CustomCameraState extends State<CustomCamera> with WidgetsBindingObserver
   Future<void> takePicture() async {
     final CameraController? cameraController = controller;
 
-    if (!cameraController!.value.isInitialized) {return;}
-    if (cameraController.value.isTakingPicture) {return;}
+    if (!cameraController!.value.isInitialized) {
+      return;
+    }
+    if (cameraController.value.isTakingPicture) {
+      return;
+    }
     try {
       lockDeviceOrientation();
       await cameraController.setFlashMode(FlashMode.off);
       XFile picture = await cameraController.takePicture();
       goToPreview(picture.path, false);
-    }
-    on CameraException catch (e) {
+    } on CameraException catch (e) {
       debugPrint('Error occurred while taking picture: $e');
       return;
     }
   }
 
   void lockDeviceOrientation() {
-    List<DeviceOrientation> deviceOrientation = MediaQuery.of(context).orientation == Orientation.portrait ? [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown] : [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight];
+    List<DeviceOrientation> deviceOrientation =
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
+            : [
+                DeviceOrientation.landscapeLeft,
+                DeviceOrientation.landscapeRight
+              ];
     SystemChrome.setPreferredOrientations(deviceOrientation);
   }
 
   Future<void> startVideoRecording() async {
     final CameraController? cameraController = controller;
 
-    if (!cameraController!.value.isInitialized) {return;}
-    if (cameraController.value.isRecordingVideo) {return;}
+    if (!cameraController!.value.isInitialized) {
+      return;
+    }
+    if (cameraController.value.isRecordingVideo) {
+      return;
+    }
     try {
       lockDeviceOrientation();
       await cameraController.startVideoRecording();
-    }
-    on CameraException catch (e) {
+    } on CameraException catch (e) {
       debugPrint('Error occurred while starting to record video: $e');
       return;
     }
@@ -197,41 +238,42 @@ class _CustomCameraState extends State<CustomCamera> with WidgetsBindingObserver
   Future<void> stopVideoRecording() async {
     final CameraController? cameraController = controller;
 
-    if (!cameraController!.value.isInitialized) {return;}
-    if (!cameraController.value.isRecordingVideo) {return;}
+    if (!cameraController!.value.isInitialized) {
+      return;
+    }
+    if (!cameraController.value.isRecordingVideo) {
+      return;
+    }
     try {
       XFile video = await cameraController.stopVideoRecording();
       goToPreview(video.path, true);
-    }
-    on CameraException catch (e) {
+    } on CameraException catch (e) {
       debugPrint('Error occurred while stopping video record: $e');
       return;
     }
   }
 
   void goToPreview(String url, bool isVideo) async {
-    final result = await Navigator.of(context).push(MaterialPageRoute(builder: (_) => camera_preview.CameraPreview(multimediaItem: MultimediaItem(url, isVideo))));
+    final result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => camera_preview.CameraPreview(
+            multimediaItem: MultimediaItem(url, isVideo))));
     if (result is MultimediaItem) {
       if (mounted) Navigator.of(context).pop(result);
     }
   }
 
   Widget _getVideoControls() {
-    return widget.isRecordingEnabled ?
-      Expanded(
-          child: TextButton(
+    return widget.isRecordingEnabled
+        ? Expanded(
+            child: TextButton(
             style: CustomTheme.circularButtonStyle,
             onPressed: () {
               setState(() => _isVideoMode = !_isVideoMode);
             },
-            child: Icon(
-                !_isVideoMode
-                    ? Icons.videocam
-                    : Icons.camera_alt,
-                color: Colors.white,
-                size: 30.w),
-          )
-      ) : const Spacer();
+            child: Icon(!_isVideoMode ? Icons.videocam : Icons.camera_alt,
+                color: Colors.white, size: 30.w),
+          ))
+        : const Spacer();
   }
 
   @override
@@ -239,71 +281,86 @@ class _CustomCameraState extends State<CustomCamera> with WidgetsBindingObserver
     ScreenUtil.init(context, designSize: const Size(375, 812));
     return Scaffold(
         body: SafeArea(
-            child:
-            Stack(
-                children: [
-                  _cameraPreviewWidget(),
-                  OrientationBuilder(builder: (context, orientation) {
-                    return Align(
-                      alignment: orientation == Orientation.portrait ?  Alignment.topRight : Alignment.topLeft,
-                      child: IconButton(onPressed: () {
-                        exitCallback() => { Navigator.of(context).pop() };
-                        CameraAlert exitAlert = CameraAlert(title: 'Salir de fotografías', description: 'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?', positiveInput: 'Salir', negativeInput: 'Volver', positiveCallback: exitCallback);
-                        showDialog(context: context, builder: (_) { return exitAlert; });
-                      }, icon: Icon(CustomIcons.close, size: 23.w, color: CustomTheme.secondaryColor)),
-                    );
-                  }),
-                  OrientationBuilder(
-                      builder: (context, orientation) {
-                        return Align(
-                            alignment: orientation == Orientation.portrait ? Alignment.bottomCenter : Alignment.centerRight,
-                            child: Container(
-                              height: orientation == Orientation.portrait ? 189.h : null,
-                              width: orientation == Orientation.portrait ? null : 189.w,
-                              decoration: BoxDecoration(color: CustomTheme.backgroundColor.withOpacity(0.8)),
-                              child:
-                              Flex(direction: orientation == Orientation.portrait ? Axis.horizontal : Axis.vertical,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    _getVideoControls(),
-                                    Expanded(
-                                        child: TextButton(
-                                          onPressed: () {
-                                            if (!_isVideoMode) {
-                                              takePicture();
-                                            }
-                                            else {
-                                              if (_isVideoRecording) {
-                                                stopVideoRecording();
-                                              }
-                                              else {
-                                                startVideoRecording();
-                                              }
+            child: Stack(children: [
+      _cameraPreviewWidget(),
+      OrientationBuilder(builder: (context, orientation) {
+        return Align(
+          alignment: orientation == Orientation.portrait
+              ? Alignment.topRight
+              : Alignment.topLeft,
+          child: IconButton(
+              onPressed: () {
+                exitCallback() => {Navigator.of(context).pop()};
+                CameraAlert exitAlert = CameraAlert(
+                    title: 'Salir de fotografías',
+                    description:
+                        'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
+                    positiveInput: 'Salir',
+                    negativeInput: 'Volver',
+                    positiveCallback: exitCallback);
+                showDialog(
+                    context: context,
+                    builder: (_) {
+                      return exitAlert;
+                    });
+              },
+              icon: Icon(CustomIcons.close,
+                  size: 23.w, color: CustomTheme.secondaryColor)),
+        );
+      }),
+      OrientationBuilder(builder: (context, orientation) {
+        return Align(
+            alignment: orientation == Orientation.portrait
+                ? Alignment.bottomCenter
+                : Alignment.centerRight,
+            child: Container(
+              height: orientation == Orientation.portrait ? 189.h : null,
+              width: orientation == Orientation.portrait ? null : 189.w,
+              decoration: BoxDecoration(color: CustomTheme.backgroundColor),
+              child: Flex(
+                  direction: orientation == Orientation.portrait
+                      ? Axis.horizontal
+                      : Axis.vertical,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _getVideoControls(),
+                    Expanded(
+                        child: TextButton(
+                      onPressed: () {
+                        if (!_isVideoMode) {
+                          takePicture();
+                        } else {
+                          if (_isVideoRecording) {
+                            stopVideoRecording();
+                          } else {
+                            startVideoRecording();
+                          }
 
-                                              setState(() => _isVideoRecording = !_isVideoRecording);
-                                            }
-                                          },
-                                          style: CustomTheme.circularButtonStyle,
-                                          child: SizedBox(
-                                            width: 82.w,
-                                            height: 82.w,
-                                            child: Icon(
-                                                !_isVideoMode
-                                                    ? (widget.isRecordingEnabled ? Icons.camera : CustomIcons.camera)
-                                                    : !_isVideoRecording ? Icons.fiber_manual_record : Icons.stop,
-                                                color: Colors.white,
-                                                size: widget.isRecordingEnabled ? 50.w : 45.w),
-                                          ),
-                                        )),
-                                    const Spacer(),
-                                  ]),
-                            )
-                        );
-                      }
-                  )
-                ])
-        )
-    );
+                          setState(
+                              () => _isVideoRecording = !_isVideoRecording);
+                        }
+                      },
+                      style: CustomTheme.circularButtonStyle,
+                      child: SizedBox(
+                        width: 82.w,
+                        height: 82.w,
+                        child: Icon(
+                            !_isVideoMode
+                                ? (widget.isRecordingEnabled
+                                    ? Icons.camera
+                                    : CustomIcons.camera)
+                                : !_isVideoRecording
+                                    ? Icons.fiber_manual_record
+                                    : Icons.stop,
+                            color: Colors.white,
+                            size: widget.isRecordingEnabled ? 50.w : 45.w),
+                      ),
+                    )),
+                    const Spacer(),
+                  ]),
+            ));
+      })
+    ])));
   }
 
   /// Display the preview from the camera (or a message if the preview is not available).
@@ -320,12 +377,11 @@ class _CustomCameraState extends State<CustomCamera> with WidgetsBindingObserver
           controller!,
           child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
-                return GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onScaleStart: _handleScaleStart,
-                    onScaleUpdate: _handleScaleUpdate
-                );
-              }),
+            return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onScaleStart: _handleScaleStart,
+                onScaleUpdate: _handleScaleUpdate);
+          }),
         ),
       );
     }
@@ -347,4 +403,3 @@ class _CustomCameraState extends State<CustomCamera> with WidgetsBindingObserver
     await controller!.setZoomLevel(_currentScale);
   }
 }
-
