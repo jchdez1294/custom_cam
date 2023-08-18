@@ -160,6 +160,14 @@ class _CustomCameraState extends State<CustomCamera>
     CustomTheme.secondaryColor = widget.secondaryColor;
     CustomTheme.backgroundColor = widget.backgroundColor;
     // initialize the rear camera
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     initCamera();
   }
 
@@ -183,6 +191,11 @@ class _CustomCameraState extends State<CustomCamera>
   void dispose() {
     // Dispose of the controller when the widget is disposed.
     controller?.dispose();
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     super.dispose();
   }
 
@@ -196,7 +209,6 @@ class _CustomCameraState extends State<CustomCamera>
       return;
     }
     try {
-      lockDeviceOrientation();
       await cameraController.setFlashMode(FlashMode.off);
       XFile picture = await cameraController.takePicture();
       goToPreview(picture.path, false);
@@ -204,16 +216,6 @@ class _CustomCameraState extends State<CustomCamera>
       debugPrint('Error occurred while taking picture: $e');
       return;
     }
-  }
-
-  void lockDeviceOrientation() {
-    List<DeviceOrientation> deviceOrientation = [
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight
-    ];
-    SystemChrome.setPreferredOrientations(deviceOrientation);
   }
 
   Future<void> startVideoRecording() async {
@@ -226,7 +228,6 @@ class _CustomCameraState extends State<CustomCamera>
       return;
     }
     try {
-      lockDeviceOrientation();
       await cameraController.startVideoRecording();
     } on CameraException catch (e) {
       debugPrint('Error occurred while starting to record video: $e');
