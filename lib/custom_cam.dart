@@ -1,5 +1,7 @@
 library custom_cam;
 
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:custom_cam/src/custom_icons_icons.dart';
 import 'package:custom_cam/src/camera_alert.dart';
@@ -332,7 +334,8 @@ class _CustomCameraState extends State<CustomCamera>
                         });
                   },
                   icon: Icon(CustomIcons.close,
-                      size: 23.w, color: CustomTheme.secondaryColor),
+                      size: _closeIconSize(orientation),
+                      color: CustomTheme.secondaryColor),
                 ),
               );
             }),
@@ -344,7 +347,7 @@ class _CustomCameraState extends State<CustomCamera>
                       : Alignment.centerRight,
                   child: Container(
                     height: orientation == Orientation.portrait ? 189.h : null,
-                    width: orientation == Orientation.portrait ? null : 189.w,
+                    width: _containerWidth(orientation),
                     decoration: BoxDecoration(
                         color: CustomTheme.backgroundColor.withOpacity(0.8)),
                     child: Flex(
@@ -383,8 +386,7 @@ class _CustomCameraState extends State<CustomCamera>
                                           ? Icons.fiber_manual_record
                                           : Icons.stop,
                                   color: Colors.white,
-                                  size:
-                                      widget.isRecordingEnabled ? 50.w : 45.w),
+                                  size: _cameraIconSize(orientation)),
                             ),
                           ),
                         ),
@@ -440,5 +442,21 @@ class _CustomCameraState extends State<CustomCamera>
         .clamp(_minAvailableZoom, _maxAvailableZoom);
 
     await controller!.setZoomLevel(_currentScale);
+  }
+
+  double? _containerWidth(Orientation orientation) {
+    double width = Platform.isAndroid ? 189.w : 90.w;
+    return orientation == Orientation.portrait ? null : width;
+  }
+
+  double _cameraIconSize(Orientation orientation) {
+    if (widget.isRecordingEnabled) {
+      return 50.w;
+    }
+    return Platform.isIOS && orientation == Orientation.landscape ? 25.w : 45.w;
+  }
+
+  double _closeIconSize(Orientation orientation) {
+    return Platform.isIOS && orientation == Orientation.landscape ? 10.w : 23.w;
   }
 }
