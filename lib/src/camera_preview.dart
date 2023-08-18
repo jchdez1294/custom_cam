@@ -62,6 +62,8 @@ class _CameraPreviewState extends State<CameraPreview> {
   @override
   void dispose() {
     SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
