@@ -134,16 +134,9 @@ class _CameraPreviewState extends State<CameraPreview> {
           ),
           OrientationBuilder(builder: (context, orientation) {
             return Align(
-                alignment: orientation == Orientation.portrait
-                    ? Alignment.bottomCenter
-                    : Alignment.centerRight,
+                alignment: Alignment.bottomCenter,
                 child: Container(
-                  height: orientation == Orientation.portrait
-                      ? 189.h
-                      : double.infinity,
-                  width: orientation == Orientation.portrait
-                      ? double.infinity
-                      : 189.w,
+                  height: 189.h,
                   decoration: BoxDecoration(
                       color: CustomTheme.backgroundColor.withOpacity(0.8)),
                   child: Column(

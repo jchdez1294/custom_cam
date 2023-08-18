@@ -291,9 +291,7 @@ class _CustomCameraState extends State<CustomCamera>
             ),
             OrientationBuilder(builder: (context, orientation) {
               return Align(
-                alignment: orientation == Orientation.portrait
-                    ? Alignment.topRight
-                    : Alignment.topLeft,
+                alignment: Alignment.topRight,
                 child: IconButton(
                   onPressed: () {
                     exitCallback() => {Navigator.of(context).pop()};
@@ -318,18 +316,13 @@ class _CustomCameraState extends State<CustomCamera>
             OrientationBuilder(
               builder: (context, orientation) {
                 return Align(
-                  alignment: orientation == Orientation.portrait
-                      ? Alignment.bottomCenter
-                      : Alignment.centerRight,
+                  alignment: Alignment.bottomCenter,
                   child: Container(
-                    height: orientation == Orientation.portrait ? 189.h : null,
-                    width: orientation == Orientation.portrait ? null : 189.w,
+                    height: 189.h,
                     decoration: BoxDecoration(
                         color: CustomTheme.backgroundColor.withOpacity(0.8)),
                     child: Flex(
-                      direction: orientation == Orientation.portrait
-                          ? Axis.horizontal
-                          : Axis.vertical,
+                      direction: Axis.horizontal,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _getVideoControls(),
