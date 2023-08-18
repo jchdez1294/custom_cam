@@ -28,6 +28,11 @@ class _CameraPreviewState extends State<CameraPreview> {
   void initState() {
     super.initState();
 
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     // Create and store the VideoPlayerController. The VideoPlayerController
     // offers several different constructors to play videos from assets, files,
     // or the internet.
@@ -112,12 +117,14 @@ class _CameraPreviewState extends State<CameraPreview> {
                 onPressed: () {
                   exitCallback() => {Navigator.of(context).pop()};
                   CameraAlert exitAlert = CameraAlert(
-                      title: 'Salir de fotografías',
-                      description:
-                          'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
-                      positiveInput: 'Salir',
-                      negativeInput: 'Volver',
-                      positiveCallback: exitCallback);
+                    title: 'Salir de fotografías',
+                    description:
+                        'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
+                    positiveInput: 'Salir',
+                    negativeInput: 'Volver',
+                    positiveCallback: exitCallback,
+                    orientation: Orientation.portrait,
+                  );
                   showDialog(
                       context: context,
                       builder: (_) {

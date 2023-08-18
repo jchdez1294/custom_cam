@@ -43,6 +43,7 @@ class _CustomCameraState extends State<CustomCamera>
   double _maxAvailableZoom = 1.0;
   double _currentScale = 1.0;
   double _baseScale = 1.0;
+  Orientation currentOrientation = Orientation.portrait;
 
   // Counting pointers (number of user fingers on screen)
   int _pointers = 0;
@@ -55,11 +56,13 @@ class _CustomCameraState extends State<CustomCamera>
       cameras = await availableCameras();
     } on CameraException catch (e) {
       CameraAlert exitAlert = CameraAlert(
-          title: 'Ocurrió un error',
-          description: 'No fue posible inicializar la cámara',
-          positiveInput: 'Aceptar',
-          negativeInput: '',
-          positiveCallback: exitCallback);
+        title: 'Ocurrió un error',
+        description: 'No fue posible inicializar la cámara',
+        positiveInput: 'Aceptar',
+        negativeInput: '',
+        positiveCallback: exitCallback,
+        orientation: currentOrientation,
+      );
       showDialog(
           context: context,
           builder: (_) {
@@ -135,11 +138,13 @@ class _CustomCameraState extends State<CustomCamera>
           break;
       }
       CameraAlert exitAlert = CameraAlert(
-          title: 'Ocurrió un error',
-          description: errorDescription,
-          positiveInput: 'Aceptar',
-          negativeInput: '',
-          positiveCallback: exitCallback);
+        title: 'Ocurrió un error',
+        description: errorDescription,
+        positiveInput: 'Aceptar',
+        negativeInput: '',
+        positiveCallback: exitCallback,
+        orientation: currentOrientation,
+      );
       if (mounted)
         showDialog(
             context: context,
@@ -159,6 +164,14 @@ class _CustomCameraState extends State<CustomCamera>
     CustomTheme.primaryColor = widget.primaryColor;
     CustomTheme.secondaryColor = widget.secondaryColor;
     CustomTheme.backgroundColor = widget.backgroundColor;
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
     // initialize the rear camera
     initCamera();
   }
@@ -183,6 +196,11 @@ class _CustomCameraState extends State<CustomCamera>
   void dispose() {
     // Dispose of the controller when the widget is disposed.
     controller?.dispose();
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     super.dispose();
   }
 
@@ -196,7 +214,7 @@ class _CustomCameraState extends State<CustomCamera>
       return;
     }
     try {
-      lockDeviceOrientation();
+      // lockDeviceOrientation();
       await cameraController.setFlashMode(FlashMode.off);
       XFile picture = await cameraController.takePicture();
       goToPreview(picture.path, false);
@@ -206,16 +224,16 @@ class _CustomCameraState extends State<CustomCamera>
     }
   }
 
-  void lockDeviceOrientation() {
-    List<DeviceOrientation> deviceOrientation =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
-            : [
-                DeviceOrientation.landscapeLeft,
-                DeviceOrientation.landscapeRight
-              ];
-    SystemChrome.setPreferredOrientations(deviceOrientation);
-  }
+  // void lockDeviceOrientation() {
+  //   List<DeviceOrientation> deviceOrientation =
+  //       MediaQuery.of(context).orientation == Orientation.portrait
+  //           ? [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
+  //           : [
+  //               DeviceOrientation.landscapeLeft,
+  //               DeviceOrientation.landscapeRight
+  //             ];
+  //   SystemChrome.setPreferredOrientations(deviceOrientation);
+  // }
 
   Future<void> startVideoRecording() async {
     final CameraController? cameraController = controller;
@@ -227,7 +245,7 @@ class _CustomCameraState extends State<CustomCamera>
       return;
     }
     try {
-      lockDeviceOrientation();
+      // lockDeviceOrientation();
       await cameraController.startVideoRecording();
     } on CameraException catch (e) {
       debugPrint('Error occurred while starting to record video: $e');
@@ -290,6 +308,7 @@ class _CustomCameraState extends State<CustomCamera>
               child: _cameraPreviewWidget(),
             ),
             OrientationBuilder(builder: (context, orientation) {
+              currentOrientation = orientation;
               return Align(
                 alignment: orientation == Orientation.portrait
                     ? Alignment.topRight
@@ -298,12 +317,14 @@ class _CustomCameraState extends State<CustomCamera>
                   onPressed: () {
                     exitCallback() => {Navigator.of(context).pop()};
                     CameraAlert exitAlert = CameraAlert(
-                        title: 'Salir de fotografías',
-                        description:
-                            'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
-                        positiveInput: 'Salir',
-                        negativeInput: 'Volver',
-                        positiveCallback: exitCallback);
+                      title: 'Salir de fotografías',
+                      description:
+                          'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
+                      positiveInput: 'Salir',
+                      negativeInput: 'Volver',
+                      positiveCallback: exitCallback,
+                      orientation: orientation,
+                    );
                     showDialog(
                         context: context,
                         builder: (_) {
