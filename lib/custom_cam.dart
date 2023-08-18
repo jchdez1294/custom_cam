@@ -266,13 +266,14 @@ class _CustomCameraState extends State<CustomCamera>
     return widget.isRecordingEnabled
         ? Expanded(
             child: TextButton(
-            style: CustomTheme.circularButtonStyle,
-            onPressed: () {
-              setState(() => _isVideoMode = !_isVideoMode);
-            },
-            child: Icon(!_isVideoMode ? Icons.videocam : Icons.camera_alt,
-                color: Colors.white, size: 30.w),
-          ))
+              style: CustomTheme.circularButtonStyle,
+              onPressed: () {
+                setState(() => _isVideoMode = !_isVideoMode);
+              },
+              child: Icon(!_isVideoMode ? Icons.videocam : Icons.camera_alt,
+                  color: Colors.white, size: 30.w),
+            ),
+          )
         : const Spacer();
   }
 
@@ -280,87 +281,103 @@ class _CustomCameraState extends State<CustomCamera>
   Widget build(BuildContext context) {
     ScreenUtil.init(context, designSize: const Size(375, 812));
     return Scaffold(
-        body: SafeArea(
-            child: Stack(children: [
-      _cameraPreviewWidget(),
-      OrientationBuilder(builder: (context, orientation) {
-        return Align(
-          alignment: orientation == Orientation.portrait
-              ? Alignment.topRight
-              : Alignment.topLeft,
-          child: IconButton(
-              onPressed: () {
-                exitCallback() => {Navigator.of(context).pop()};
-                CameraAlert exitAlert = CameraAlert(
-                    title: 'Salir de fotografías',
-                    description:
-                        'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
-                    positiveInput: 'Salir',
-                    negativeInput: 'Volver',
-                    positiveCallback: exitCallback);
-                showDialog(
-                    context: context,
-                    builder: (_) {
-                      return exitAlert;
-                    });
-              },
-              icon: Icon(CustomIcons.close,
-                  size: 23.w, color: CustomTheme.secondaryColor)),
-        );
-      }),
-      OrientationBuilder(builder: (context, orientation) {
-        return Align(
-            alignment: orientation == Orientation.portrait
-                ? Alignment.bottomCenter
-                : Alignment.centerRight,
-            child: Container(
-              height: orientation == Orientation.portrait ? 189.h : null,
-              width: orientation == Orientation.portrait ? null : 189.w,
-              decoration: BoxDecoration(color: CustomTheme.backgroundColor),
-              child: Flex(
-                  direction: orientation == Orientation.portrait
-                      ? Axis.horizontal
-                      : Axis.vertical,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _getVideoControls(),
-                    Expanded(
-                        child: TextButton(
-                      onPressed: () {
-                        if (!_isVideoMode) {
-                          takePicture();
-                        } else {
-                          if (_isVideoRecording) {
-                            stopVideoRecording();
-                          } else {
-                            startVideoRecording();
-                          }
+      body: SafeArea(
+        child: Stack(
+          children: [
+            SizedBox(
+              height: double.infinity,
+              width: double.infinity,
+              child: _cameraPreviewWidget(),
+            ),
+            OrientationBuilder(builder: (context, orientation) {
+              return Align(
+                alignment: orientation == Orientation.portrait
+                    ? Alignment.topRight
+                    : Alignment.topLeft,
+                child: IconButton(
+                  onPressed: () {
+                    exitCallback() => {Navigator.of(context).pop()};
+                    CameraAlert exitAlert = CameraAlert(
+                        title: 'Salir de fotografías',
+                        description:
+                            'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
+                        positiveInput: 'Salir',
+                        negativeInput: 'Volver',
+                        positiveCallback: exitCallback);
+                    showDialog(
+                        context: context,
+                        builder: (_) {
+                          return exitAlert;
+                        });
+                  },
+                  icon: Icon(CustomIcons.close,
+                      size: 23.w, color: CustomTheme.secondaryColor),
+                ),
+              );
+            }),
+            OrientationBuilder(
+              builder: (context, orientation) {
+                return Align(
+                  alignment: orientation == Orientation.portrait
+                      ? Alignment.bottomCenter
+                      : Alignment.centerRight,
+                  child: Container(
+                    height: orientation == Orientation.portrait ? 189.h : null,
+                    width: orientation == Orientation.portrait ? null : 189.w,
+                    decoration: BoxDecoration(
+                        color: CustomTheme.backgroundColor.withOpacity(0.8)),
+                    child: Flex(
+                      direction: orientation == Orientation.portrait
+                          ? Axis.horizontal
+                          : Axis.vertical,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _getVideoControls(),
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () {
+                              if (!_isVideoMode) {
+                                takePicture();
+                              } else {
+                                if (_isVideoRecording) {
+                                  stopVideoRecording();
+                                } else {
+                                  startVideoRecording();
+                                }
 
-                          setState(
-                              () => _isVideoRecording = !_isVideoRecording);
-                        }
-                      },
-                      style: CustomTheme.circularButtonStyle,
-                      child: SizedBox(
-                        width: 82.w,
-                        height: 82.w,
-                        child: Icon(
-                            !_isVideoMode
-                                ? (widget.isRecordingEnabled
-                                    ? Icons.camera
-                                    : CustomIcons.camera)
-                                : !_isVideoRecording
-                                    ? Icons.fiber_manual_record
-                                    : Icons.stop,
-                            color: Colors.white,
-                            size: widget.isRecordingEnabled ? 50.w : 45.w),
-                      ),
-                    )),
-                    const Spacer(),
-                  ]),
-            ));
-      })
-    ])));
+                                setState(() =>
+                                    _isVideoRecording = !_isVideoRecording);
+                              }
+                            },
+                            style: CustomTheme.circularButtonStyle,
+                            child: SizedBox(
+                              width: 82.w,
+                              height: 82.w,
+                              child: Icon(
+                                  !_isVideoMode
+                                      ? (widget.isRecordingEnabled
+                                          ? Icons.camera
+                                          : CustomIcons.camera)
+                                      : !_isVideoRecording
+                                          ? Icons.fiber_manual_record
+                                          : Icons.stop,
+                                  color: Colors.white,
+                                  size:
+                                      widget.isRecordingEnabled ? 50.w : 45.w),
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   /// Display the preview from the camera (or a message if the preview is not available).
@@ -376,12 +393,13 @@ class _CustomCameraState extends State<CustomCamera>
         child: CameraPreview(
           controller!,
           child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-            return GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onScaleStart: _handleScaleStart,
-                onScaleUpdate: _handleScaleUpdate);
-          }),
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onScaleStart: _handleScaleStart,
+                  onScaleUpdate: _handleScaleUpdate);
+            },
+          ),
         ),
       );
     }
