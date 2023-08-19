@@ -2,7 +2,7 @@ library custom_cam;
 
 import 'dart:io';
 
-import 'package:camera/camera.dart';
+// import 'package:camera/camera.dart';
 import 'package:custom_cam/src/custom_icons_icons.dart';
 import 'package:custom_cam/src/camera_alert.dart';
 import 'package:custom_cam/src/custom_theme.dart';
@@ -34,9 +34,9 @@ class CustomCamera extends StatefulWidget {
 
 class _CustomCameraState extends State<CustomCamera>
     with WidgetsBindingObserver {
-  List<CameraDescription> cameras = <CameraDescription>[];
+  // List<CameraDescription> cameras = <CameraDescription>[];
 
-  CameraController? controller;
+  // CameraController? controller;
 
   late bool _isVideoMode = false;
   late bool _isVideoRecording = false;
@@ -53,111 +53,111 @@ class _CustomCameraState extends State<CustomCamera>
   Future<void> initCamera() async {
     exitCallback() => {Navigator.of(context).pop()};
 
-    // initialize cameras.
-    try {
-      cameras = await availableCameras();
-    } on CameraException catch (e) {
-      CameraAlert exitAlert = CameraAlert(
-        title: 'Ocurrió un error',
-        description: 'No fue posible inicializar la cámara',
-        positiveInput: 'Aceptar',
-        negativeInput: '',
-        positiveCallback: exitCallback,
-        orientation: currentOrientation,
-      );
-      showDialog(
-          context: context,
-          builder: (_) {
-            return exitAlert;
-          });
-      debugPrint("$e occurred while initializing the camera");
-    }
+    // // initialize cameras.
+    // try {
+    //   cameras = await availableCameras();
+    // } on CameraException catch (e) {
+    //   CameraAlert exitAlert = CameraAlert(
+    //     title: 'Ocurrió un error',
+    //     description: 'No fue posible inicializar la cámara',
+    //     positiveInput: 'Aceptar',
+    //     negativeInput: '',
+    //     positiveCallback: exitCallback,
+    //     orientation: currentOrientation,
+    //   );
+    //   showDialog(
+    //       context: context,
+    //       builder: (_) {
+    //         return exitAlert;
+    //       });
+    //   debugPrint("$e occurred while initializing the camera");
+    // }
 
-    final CameraController? oldController = controller;
-    if (oldController != null) {
-      // `controller` needs to be set to null before getting disposed,
-      // to avoid a race condition when we use the controller that is being
-      // disposed. This happens when camera permission dialog shows up,
-      // which triggers `didChangeAppLifecycleState`, which disposes and
-      // re-creates the controller.
-      controller = null;
-      await oldController.dispose();
-    }
+    // final CameraController? oldController = controller;
+    // if (oldController != null) {
+    //   // `controller` needs to be set to null before getting disposed,
+    //   // to avoid a race condition when we use the controller that is being
+    //   // disposed. This happens when camera permission dialog shows up,
+    //   // which triggers `didChangeAppLifecycleState`, which disposes and
+    //   // re-creates the controller.
+    //   controller = null;
+    //   await oldController.dispose();
+    // }
 
-    final CameraController cameraController = CameraController(
-        cameras[0], ResolutionPreset.high,
-        enableAudio: widget.isRecordingEnabled);
+    // final CameraController cameraController = CameraController(
+    //     cameras[0], ResolutionPreset.high,
+    //     enableAudio: widget.isRecordingEnabled);
 
-    controller = cameraController;
+    // controller = cameraController;
 
-    // Update UI if controller updated
-    cameraController.addListener(() {
-      if (mounted) setState(() {});
-    });
+    // // Update UI if controller updated
+    // cameraController.addListener(() {
+    //   if (mounted) setState(() {});
+    // });
 
-    try {
-      await cameraController.initialize();
-      await Future.wait(<Future<Object?>>[
-        cameraController
-            .getMaxZoomLevel()
-            .then((double value) => _maxAvailableZoom = value),
-        cameraController
-            .getMinZoomLevel()
-            .then((double value) => _minAvailableZoom = value),
-      ]);
-    } on CameraException catch (e) {
-      String errorDescription;
-      switch (e.code) {
-        case 'CameraAccessDenied':
-          errorDescription =
-              'Los permisos de cámara son necesarios para usar esta funcionalidad';
-          break;
-        case 'CameraAccessDeniedWithoutPrompt':
-          // iOS only
-          errorDescription =
-              'Por favor conceda los permisos de cámara desde la configuración de la aplicación';
-          break;
-        case 'CameraAccessRestricted':
-          // iOS only
-          errorDescription = 'El acceso a la cámara se encuentra restringido';
-          break;
-        case 'AudioAccessDenied':
-          errorDescription =
-              'Los permisos de grabación de audio son necesarios para usar esta funcionalidad';
-          break;
-        case 'AudioAccessDeniedWithoutPrompt':
-          // iOS only
-          errorDescription =
-              'Por favor conceda los permisos de grabación de audio desde la configuración de la aplicación';
-          break;
-        case 'AudioAccessRestricted':
-          // iOS only
-          errorDescription =
-              'El acceso a la grabación de audio se encuentra restringido';
-          break;
-        default:
-          errorDescription = 'No fue posible inicializar la cámara';
-          break;
-      }
-      CameraAlert exitAlert = CameraAlert(
-        title: 'Ocurrió un error',
-        description: errorDescription,
-        positiveInput: 'Aceptar',
-        negativeInput: '',
-        positiveCallback: exitCallback,
-        orientation: currentOrientation,
-      );
-      if (mounted)
-        showDialog(
-            context: context,
-            builder: (_) {
-              return exitAlert;
-            });
-    }
+    // try {
+    //   await cameraController.initialize();
+    //   await Future.wait(<Future<Object?>>[
+    //     cameraController
+    //         .getMaxZoomLevel()
+    //         .then((double value) => _maxAvailableZoom = value),
+    //     cameraController
+    //         .getMinZoomLevel()
+    //         .then((double value) => _minAvailableZoom = value),
+    //   ]);
+    // } on CameraException catch (e) {
+    //   String errorDescription;
+    //   switch (e.code) {
+    //     case 'CameraAccessDenied':
+    //       errorDescription =
+    //           'Los permisos de cámara son necesarios para usar esta funcionalidad';
+    //       break;
+    //     case 'CameraAccessDeniedWithoutPrompt':
+    //       // iOS only
+    //       errorDescription =
+    //           'Por favor conceda los permisos de cámara desde la configuración de la aplicación';
+    //       break;
+    //     case 'CameraAccessRestricted':
+    //       // iOS only
+    //       errorDescription = 'El acceso a la cámara se encuentra restringido';
+    //       break;
+    //     case 'AudioAccessDenied':
+    //       errorDescription =
+    //           'Los permisos de grabación de audio son necesarios para usar esta funcionalidad';
+    //       break;
+    //     case 'AudioAccessDeniedWithoutPrompt':
+    //       // iOS only
+    //       errorDescription =
+    //           'Por favor conceda los permisos de grabación de audio desde la configuración de la aplicación';
+    //       break;
+    //     case 'AudioAccessRestricted':
+    //       // iOS only
+    //       errorDescription =
+    //           'El acceso a la grabación de audio se encuentra restringido';
+    //       break;
+    //     default:
+    //       errorDescription = 'No fue posible inicializar la cámara';
+    //       break;
+    //   }
+    //   CameraAlert exitAlert = CameraAlert(
+    //     title: 'Ocurrió un error',
+    //     description: errorDescription,
+    //     positiveInput: 'Aceptar',
+    //     negativeInput: '',
+    //     positiveCallback: exitCallback,
+    //     orientation: currentOrientation,
+    //   );
+    //   if (mounted)
+    //     showDialog(
+    //         context: context,
+    //         builder: (_) {
+    //           return exitAlert;
+    //         });
+    // }
 
-    if (mounted) {
-      setState(() {});
-    }
+    // if (mounted) {
+    //   setState(() {});
+    // }
   }
 
   @override
@@ -180,24 +180,24 @@ class _CustomCameraState extends State<CustomCamera>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final CameraController? cameraController = controller;
+    // final CameraController? cameraController = controller;
 
-    // App state changed before we got the chance to initialize.
-    if (cameraController == null || !cameraController.value.isInitialized) {
-      return;
-    }
+    // // App state changed before we got the chance to initialize.
+    // if (cameraController == null || !cameraController.value.isInitialized) {
+    //   return;
+    // }
 
-    if (state == AppLifecycleState.inactive) {
-      cameraController.dispose();
-    } else if (state == AppLifecycleState.resumed) {
-      initCamera();
-    }
+    // if (state == AppLifecycleState.inactive) {
+    //   cameraController.dispose();
+    // } else if (state == AppLifecycleState.resumed) {
+    //   initCamera();
+    // }
   }
 
   @override
   void dispose() {
     // Dispose of the controller when the widget is disposed.
-    controller?.dispose();
+    // controller?.dispose();
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -207,23 +207,23 @@ class _CustomCameraState extends State<CustomCamera>
   }
 
   Future<void> takePicture() async {
-    final CameraController? cameraController = controller;
+    // final CameraController? cameraController = controller;
 
-    if (!cameraController!.value.isInitialized) {
-      return;
-    }
-    if (cameraController.value.isTakingPicture) {
-      return;
-    }
-    try {
-      // lockDeviceOrientation();
-      await cameraController.setFlashMode(FlashMode.off);
-      XFile picture = await cameraController.takePicture();
-      goToPreview(picture.path, false);
-    } on CameraException catch (e) {
-      debugPrint('Error occurred while taking picture: $e');
-      return;
-    }
+    // if (!cameraController!.value.isInitialized) {
+    //   return;
+    // }
+    // if (cameraController.value.isTakingPicture) {
+    //   return;
+    // }
+    // try {
+    //   // lockDeviceOrientation();
+    //   await cameraController.setFlashMode(FlashMode.off);
+    //   XFile picture = await cameraController.takePicture();
+    //   goToPreview(picture.path, false);
+    // } on CameraException catch (e) {
+    //   debugPrint('Error occurred while taking picture: $e');
+    //   return;
+    // }
   }
 
   // void lockDeviceOrientation() {
@@ -238,48 +238,48 @@ class _CustomCameraState extends State<CustomCamera>
   // }
 
   Future<void> startVideoRecording() async {
-    final CameraController? cameraController = controller;
+    // final CameraController? cameraController = controller;
 
-    if (!cameraController!.value.isInitialized) {
-      return;
-    }
-    if (cameraController.value.isRecordingVideo) {
-      return;
-    }
-    try {
-      // lockDeviceOrientation();
-      await cameraController.startVideoRecording();
-    } on CameraException catch (e) {
-      debugPrint('Error occurred while starting to record video: $e');
-      return;
-    }
+    // if (!cameraController!.value.isInitialized) {
+    //   return;
+    // }
+    // if (cameraController.value.isRecordingVideo) {
+    //   return;
+    // }
+    // try {
+    //   // lockDeviceOrientation();
+    //   await cameraController.startVideoRecording();
+    // } on CameraException catch (e) {
+    //   debugPrint('Error occurred while starting to record video: $e');
+    //   return;
+    // }
   }
 
   Future<void> stopVideoRecording() async {
-    final CameraController? cameraController = controller;
+    // final CameraController? cameraController = controller;
 
-    if (!cameraController!.value.isInitialized) {
-      return;
-    }
-    if (!cameraController.value.isRecordingVideo) {
-      return;
-    }
-    try {
-      XFile video = await cameraController.stopVideoRecording();
-      goToPreview(video.path, true);
-    } on CameraException catch (e) {
-      debugPrint('Error occurred while stopping video record: $e');
-      return;
-    }
+    // if (!cameraController!.value.isInitialized) {
+    //   return;
+    // }
+    // if (!cameraController.value.isRecordingVideo) {
+    //   return;
+    // }
+    // try {
+    //   XFile video = await cameraController.stopVideoRecording();
+    //   goToPreview(video.path, true);
+    // } on CameraException catch (e) {
+    //   debugPrint('Error occurred while stopping video record: $e');
+    //   return;
+    // }
   }
 
   void goToPreview(String url, bool isVideo) async {
-    final result = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => camera_preview.CameraPreview(
-            multimediaItem: MultimediaItem(url, isVideo))));
-    if (result is MultimediaItem) {
-      if (mounted) Navigator.of(context).pop(result);
-    }
+    // final result = await Navigator.of(context).push(MaterialPageRoute(
+    //     builder: (_) => camera_preview.CameraPreview(
+    //         multimediaItem: MultimediaItem(url, isVideo))));
+    // if (result is MultimediaItem) {
+    //   if (mounted) Navigator.of(context).pop(result);
+    // }
   }
 
   Widget _getVideoControls() {
@@ -405,27 +405,33 @@ class _CustomCameraState extends State<CustomCamera>
 
   /// Display the preview from the camera (or a message if the preview is not available).
   Widget _cameraPreviewWidget() {
-    final CameraController? cameraController = controller;
+    return Container(
+      color: Colors.white,
+      width: double.infinity,
+      height: double.infinity,
+      child: Text('hello world'),
+    );
+    // final CameraController? cameraController = controller;
 
-    if (cameraController == null || !cameraController.value.isInitialized) {
-      return const Center(child: CircularProgressIndicator());
-    } else {
-      return Listener(
-        onPointerDown: (_) => _pointers++,
-        onPointerUp: (_) => _pointers--,
-        child: CameraPreview(
-          controller!,
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              return GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onScaleStart: _handleScaleStart,
-                  onScaleUpdate: _handleScaleUpdate);
-            },
-          ),
-        ),
-      );
-    }
+    // if (cameraController == null || !cameraController.value.isInitialized) {
+    //   return const Center(child: CircularProgressIndicator());
+    // } else {
+    //   return Listener(
+    //     onPointerDown: (_) => _pointers++,
+    //     onPointerUp: (_) => _pointers--,
+    //     child: CameraPreview(
+    //       controller!,
+    //       child: LayoutBuilder(
+    //         builder: (BuildContext context, BoxConstraints constraints) {
+    //           return GestureDetector(
+    //               behavior: HitTestBehavior.opaque,
+    //               onScaleStart: _handleScaleStart,
+    //               onScaleUpdate: _handleScaleUpdate);
+    //         },
+    //       ),
+    //     ),
+    //   );
+    // }
   }
 
   void _handleScaleStart(ScaleStartDetails details) {
@@ -434,14 +440,14 @@ class _CustomCameraState extends State<CustomCamera>
 
   Future<void> _handleScaleUpdate(ScaleUpdateDetails details) async {
     // When there are not exactly two fingers on screen don't scale
-    if (controller == null || _pointers != 2) {
-      return;
-    }
+    // if (controller == null || _pointers != 2) {
+    //   return;
+    // }
 
-    _currentScale = (_baseScale * details.scale)
-        .clamp(_minAvailableZoom, _maxAvailableZoom);
+    // _currentScale = (_baseScale * details.scale)
+    //     .clamp(_minAvailableZoom, _maxAvailableZoom);
 
-    await controller!.setZoomLevel(_currentScale);
+    // await controller!.setZoomLevel(_currentScale);
   }
 
   double? _containerWidth(Orientation orientation) {
