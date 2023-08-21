@@ -39,7 +39,9 @@ class CameraAlert extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: 18.h),
               child: SizedBox(
-                  width: 250.w,
+                  width: Platform.isIOS && orientation == Orientation.landscape
+                      ? null
+                      : 250.w,
                   child: Text(title,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -54,7 +56,9 @@ class CameraAlert extends StatelessWidget {
         ),
       ),
       content: SizedBox(
-          width: 250,
+          width: Platform.isIOS && orientation == Orientation.landscape
+              ? null
+              : 250.w,
           child: Text(description,
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -81,17 +85,34 @@ class CameraAlert extends StatelessWidget {
                     style: CustomTheme.textButtonStyle,
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),
-                      child: Text(positiveInput),
+                      child: Text(
+                        positiveInput,
+                        style: TextStyle(
+                          fontSize: Platform.isIOS &&
+                                  orientation == Orientation.landscape
+                              ? 8.sp
+                              : 16.sp,
+                        ),
+                      ),
                     )),
               ),
               if (negativeInput.isNotEmpty)
                 TextButton(
-                    onPressed: () async {
-                      Navigator.of(context).pop();
-                    },
-                    style: TextButton.styleFrom(
-                        foregroundColor: CustomTheme.primaryColor),
-                    child: Text(negativeInput))
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+                  },
+                  style: TextButton.styleFrom(
+                      foregroundColor: CustomTheme.primaryColor),
+                  child: Text(
+                    negativeInput,
+                    style: TextStyle(
+                      fontSize:
+                          Platform.isIOS && orientation == Orientation.landscape
+                              ? 8.sp
+                              : 16.sp,
+                    ),
+                  ),
+                ),
             ],
           ),
         )

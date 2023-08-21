@@ -226,17 +226,6 @@ class _CustomCameraState extends State<CustomCamera>
     }
   }
 
-  // void lockDeviceOrientation() {
-  //   List<DeviceOrientation> deviceOrientation =
-  //       MediaQuery.of(context).orientation == Orientation.portrait
-  //           ? [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
-  //           : [
-  //               DeviceOrientation.landscapeLeft,
-  //               DeviceOrientation.landscapeRight
-  //             ];
-  //   SystemChrome.setPreferredOrientations(deviceOrientation);
-  // }
-
   Future<void> startVideoRecording() async {
     final CameraController? cameraController = controller;
 
