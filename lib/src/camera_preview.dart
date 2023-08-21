@@ -126,16 +126,18 @@ class _CameraPreviewState extends State<CameraPreview> {
                     orientation: Orientation.portrait,
                   );
                   showDialog(
-                      context: context,
-                      builder: (_) {
-                        return exitAlert;
-                      });
+                    context: context,
+                    builder: (_) {
+                      return exitAlert;
+                    },
+                  );
                 },
                 icon: Icon(CustomIcons.close, size: 23.w),
                 color: CustomTheme.secondaryColor),
           ),
-          OrientationBuilder(builder: (context, orientation) {
-            return Align(
+          OrientationBuilder(
+            builder: (context, orientation) {
+              return Align(
                 alignment: orientation == Orientation.portrait
                     ? Alignment.bottomCenter
                     : Alignment.centerRight,
@@ -149,35 +151,44 @@ class _CameraPreviewState extends State<CameraPreview> {
                   decoration: BoxDecoration(
                       color: CustomTheme.backgroundColor.withOpacity(0.8)),
                   child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 250.w,
-                          child: TextButton(
-                              onPressed: () {
-                                saveToDocuments();
-                                Navigator.of(context)
-                                    .pop(widget.multimediaItem);
-                              },
-                              style: CustomTheme.textButtonStyle,
-                              child: const Padding(
-                                padding: EdgeInsets.all(6.0),
-                                child: Text('Guardar'),
-                              )),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 250.w,
+                        child: TextButton(
+                          onPressed: () {
+                            saveToDocuments();
+                            Navigator.of(context).pop(widget.multimediaItem);
+                          },
+                          style: CustomTheme.textButtonStyle,
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Text(
+                              'Guardar',
+                              style: TextStyle(
+                                  fontSize: 14.sp, fontWeight: FontWeight.w700),
+                            ),
+                          ),
                         ),
-                        TextButton(
-                            onPressed: () async {
-                              Navigator.of(context).pop();
-                            },
-                            style: TextButton.styleFrom(
-                                foregroundColor: CustomTheme.primaryColor),
-                            child: Text('Volver a tomar',
-                                style: TextStyle(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w700))),
-                      ]),
-                ));
-          })
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                        },
+                        style: TextButton.styleFrom(
+                            foregroundColor: CustomTheme.primaryColor),
+                        child: Text(
+                          'Volver a tomar',
+                          style: TextStyle(
+                              fontSize: 14.sp, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
     ));
