@@ -66,12 +66,6 @@ class _CameraPreviewState extends State<CameraPreview> {
 
   @override
   void dispose() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
     // Ensure disposing of the VideoPlayerController to free up resources.
     _videoController?.dispose();
     super.dispose();
@@ -115,11 +109,16 @@ class _CameraPreviewState extends State<CameraPreview> {
             alignment: Alignment.topRight,
             child: IconButton(
                 onPressed: () {
-                  exitCallback() => {
-                        Navigator.of(context)
-                          ..pop()
-                          ..pop()
-                      };
+                  exitCallback() {
+                    SystemChrome.setPreferredOrientations([
+                      DeviceOrientation.portraitUp,
+                      DeviceOrientation.portraitDown,
+                    ]);
+                    Navigator.of(context)
+                      ..pop()
+                      ..pop();
+                  }
+
                   CameraAlert exitAlert = CameraAlert(
                     title: 'Salir de fotografías',
                     description:
@@ -162,6 +161,10 @@ class _CameraPreviewState extends State<CameraPreview> {
                         child: TextButton(
                           onPressed: () {
                             saveToDocuments();
+                            SystemChrome.setPreferredOrientations([
+                              DeviceOrientation.portraitUp,
+                              DeviceOrientation.portraitDown,
+                            ]);
                             Navigator.of(context).pop(widget.multimediaItem);
                           },
                           style: CustomTheme.textButtonStyle,
@@ -177,6 +180,12 @@ class _CameraPreviewState extends State<CameraPreview> {
                       ),
                       TextButton(
                         onPressed: () async {
+                          SystemChrome.setPreferredOrientations([
+                            DeviceOrientation.landscapeRight,
+                            DeviceOrientation.landscapeLeft,
+                            DeviceOrientation.portraitUp,
+                            DeviceOrientation.portraitDown,
+                          ]);
                           Navigator.of(context).pop();
                         },
                         style: TextButton.styleFrom(
