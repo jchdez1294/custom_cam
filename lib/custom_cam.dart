@@ -219,7 +219,7 @@ class _CustomCameraState extends State<CustomCamera>
     //   // lockDeviceOrientation();
     //   await cameraController.setFlashMode(FlashMode.off);
     //   XFile picture = await cameraController.takePicture();
-    //   goToPreview(picture.path, false);
+    goToPreview('', false);
     // } on CameraException catch (e) {
     //   debugPrint('Error occurred while taking picture: $e');
     //   return;
@@ -274,12 +274,12 @@ class _CustomCameraState extends State<CustomCamera>
   }
 
   void goToPreview(String url, bool isVideo) async {
-    // final result = await Navigator.of(context).push(MaterialPageRoute(
-    //     builder: (_) => camera_preview.CameraPreview(
-    //         multimediaItem: MultimediaItem(url, isVideo))));
-    // if (result is MultimediaItem) {
-    //   if (mounted) Navigator.of(context).pop(result);
-    // }
+    final result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => camera_preview.CameraPreview(
+            multimediaItem: MultimediaItem(url, isVideo))));
+    if (result is MultimediaItem) {
+      if (mounted) Navigator.of(context).pop(result);
+    }
   }
 
   Widget _getVideoControls() {
