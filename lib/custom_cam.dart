@@ -199,11 +199,12 @@ class _CustomCameraState extends State<CustomCamera>
     // Dispose of the controller when the widget is disposed.
     controller?.dispose();
 
+    super.dispose();
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    super.dispose();
   }
 
   Future<void> takePicture() async {
