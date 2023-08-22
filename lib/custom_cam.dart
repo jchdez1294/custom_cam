@@ -1,7 +1,5 @@
 library custom_cam;
 
-import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:custom_cam/src/custom_icons_icons.dart';
 import 'package:custom_cam/src/camera_alert.dart';
@@ -435,18 +433,17 @@ class _CustomCameraState extends State<CustomCamera>
   }
 
   double? _containerWidth(Orientation orientation) {
-    double width = Platform.isAndroid ? 189.w : 90.w;
-    return orientation == Orientation.portrait ? null : width;
+    return orientation == Orientation.portrait ? null : 90.w;
   }
 
   double _cameraIconSize(Orientation orientation) {
     if (widget.isRecordingEnabled) {
       return 50.w;
     }
-    return Platform.isIOS && orientation == Orientation.landscape ? 25.w : 45.w;
+    return orientation == Orientation.landscape ? 25.w : 45.w;
   }
 
   double _closeIconSize(Orientation orientation) {
-    return Platform.isIOS && orientation == Orientation.landscape ? 10.w : 23.w;
+    return orientation == Orientation.landscape ? 10.w : 23.w;
   }
 }

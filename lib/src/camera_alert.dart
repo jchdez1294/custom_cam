@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:custom_cam/src/custom_icons_icons.dart';
 import 'package:custom_cam/src/custom_theme.dart';
 import 'package:flutter/material.dart';
@@ -32,22 +30,17 @@ class CameraAlert extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(CustomIcons.warning,
-                size: Platform.isIOS && orientation == Orientation.landscape
-                    ? 20.w
-                    : 55.w,
+                size: orientation == Orientation.landscape ? 20.w : 55.w,
                 color: CustomTheme.secondaryColor),
             Padding(
               padding: EdgeInsets.only(top: 18.h),
               child: SizedBox(
-                  width: Platform.isIOS && orientation == Orientation.landscape
-                      ? null
-                      : 250.w,
+                  width: orientation == Orientation.landscape ? null : 250.w,
                   child: Text(title,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: const Color(0xFF333333),
-                          fontSize: Platform.isIOS &&
-                                  orientation == Orientation.landscape
+                          fontSize: orientation == Orientation.landscape
                               ? 10.sp
                               : 18.sp,
                           fontWeight: FontWeight.w700))),
@@ -56,17 +49,12 @@ class CameraAlert extends StatelessWidget {
         ),
       ),
       content: SizedBox(
-          width: Platform.isIOS && orientation == Orientation.landscape
-              ? null
-              : 250.w,
+          width: orientation == Orientation.landscape ? null : 250.w,
           child: Text(description,
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: const Color(0xFF2C2C2C),
-                  fontSize:
-                      Platform.isIOS && orientation == Orientation.landscape
-                          ? 7.sp
-                          : 14.sp,
+                  fontSize: orientation == Orientation.landscape ? 7.sp : 14.sp,
                   fontWeight: FontWeight.w400))),
       actionsAlignment: MainAxisAlignment.center,
       actions: [
@@ -88,8 +76,7 @@ class CameraAlert extends StatelessWidget {
                       child: Text(
                         positiveInput,
                         style: TextStyle(
-                          fontSize: Platform.isIOS &&
-                                  orientation == Orientation.landscape
+                          fontSize: orientation == Orientation.landscape
                               ? 8.sp
                               : 16.sp,
                         ),
@@ -107,9 +94,7 @@ class CameraAlert extends StatelessWidget {
                     negativeInput,
                     style: TextStyle(
                       fontSize:
-                          Platform.isIOS && orientation == Orientation.landscape
-                              ? 8.sp
-                              : 16.sp,
+                          orientation == Orientation.landscape ? 8.sp : 16.sp,
                     ),
                   ),
                 ),
