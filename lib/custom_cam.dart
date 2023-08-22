@@ -168,8 +168,6 @@ class _CustomCameraState extends State<CustomCamera>
     CustomTheme.backgroundColor = widget.backgroundColor;
 
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
