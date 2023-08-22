@@ -115,7 +115,11 @@ class _CameraPreviewState extends State<CameraPreview> {
             alignment: Alignment.topRight,
             child: IconButton(
                 onPressed: () {
-                  exitCallback() => {Navigator.of(context).pop()};
+                  exitCallback() => {
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop()
+                      };
                   CameraAlert exitAlert = CameraAlert(
                     title: 'Salir de fotografías',
                     description:
