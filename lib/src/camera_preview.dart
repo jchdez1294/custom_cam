@@ -105,38 +105,42 @@ class _CameraPreviewState extends State<CameraPreview> {
                     ),
                   ),
                 ),
-          Align(
-            alignment: Alignment.topRight,
-            child: IconButton(
-                onPressed: () {
-                  exitCallback() {
-                    SystemChrome.setPreferredOrientations([
-                      DeviceOrientation.portraitUp,
-                      DeviceOrientation.portraitDown,
-                    ]);
-                    Navigator.of(context)
-                      ..pop()
-                      ..pop();
-                  }
+          Padding(
+            padding:
+                _isTablet ? const EdgeInsets.all(25) : const EdgeInsets.all(0),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                  onPressed: () {
+                    exitCallback() {
+                      SystemChrome.setPreferredOrientations([
+                        DeviceOrientation.portraitUp,
+                        DeviceOrientation.portraitDown,
+                      ]);
+                      Navigator.of(context)
+                        ..pop()
+                        ..pop();
+                    }
 
-                  CameraAlert exitAlert = CameraAlert(
-                    title: 'Salir de fotografías',
-                    description:
-                        'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
-                    positiveInput: 'Salir',
-                    negativeInput: 'Volver',
-                    positiveCallback: exitCallback,
-                    orientation: Orientation.portrait,
-                  );
-                  showDialog(
-                    context: context,
-                    builder: (_) {
-                      return exitAlert;
-                    },
-                  );
-                },
-                icon: Icon(CustomIcons.close, size: 23.w),
-                color: CustomTheme.secondaryColor),
+                    CameraAlert exitAlert = CameraAlert(
+                      title: 'Salir de fotografías',
+                      description:
+                          'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
+                      positiveInput: 'Salir',
+                      negativeInput: 'Volver',
+                      positiveCallback: exitCallback,
+                      orientation: Orientation.portrait,
+                    );
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return exitAlert;
+                      },
+                    );
+                  },
+                  icon: Icon(CustomIcons.close, size: 23.w),
+                  color: CustomTheme.secondaryColor),
+            ),
           ),
           OrientationBuilder(
             builder: (context, orientation) {
@@ -205,5 +209,12 @@ class _CameraPreviewState extends State<CameraPreview> {
         ],
       ),
     ));
+  }
+
+  bool get _isTablet {
+    final firstView = WidgetsBinding.instance.platformDispatcher.views.first;
+    final logicalShortestSide =
+        firstView.physicalSize.shortestSide / firstView.devicePixelRatio;
+    return logicalShortestSide > 600;
   }
 }

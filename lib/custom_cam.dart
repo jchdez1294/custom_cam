@@ -299,31 +299,36 @@ class _CustomCameraState extends State<CustomCamera>
             ),
             OrientationBuilder(builder: (context, orientation) {
               currentOrientation = orientation;
-              return Align(
-                alignment: orientation == Orientation.portrait
-                    ? Alignment.topRight
-                    : Alignment.topLeft,
-                child: IconButton(
-                  onPressed: () {
-                    exitCallback() => {Navigator.of(context).pop()};
-                    CameraAlert exitAlert = CameraAlert(
-                      title: 'Salir de fotografías',
-                      description:
-                          'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
-                      positiveInput: 'Salir',
-                      negativeInput: 'Volver',
-                      positiveCallback: exitCallback,
-                      orientation: orientation,
-                    );
-                    showDialog(
-                        context: context,
-                        builder: (_) {
-                          return exitAlert;
-                        });
-                  },
-                  icon: Icon(CustomIcons.close,
-                      size: _closeIconSize(orientation),
-                      color: CustomTheme.secondaryColor),
+              return Padding(
+                padding: _isTablet
+                    ? const EdgeInsets.all(25)
+                    : const EdgeInsets.all(0),
+                child: Align(
+                  alignment: orientation == Orientation.portrait
+                      ? Alignment.topRight
+                      : Alignment.topLeft,
+                  child: IconButton(
+                    onPressed: () {
+                      exitCallback() => {Navigator.of(context).pop()};
+                      CameraAlert exitAlert = CameraAlert(
+                        title: 'Salir de fotografías',
+                        description:
+                            'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
+                        positiveInput: 'Salir',
+                        negativeInput: 'Volver',
+                        positiveCallback: exitCallback,
+                        orientation: orientation,
+                      );
+                      showDialog(
+                          context: context,
+                          builder: (_) {
+                            return exitAlert;
+                          });
+                    },
+                    icon: Icon(CustomIcons.close,
+                        size: _closeIconSize(orientation),
+                        color: CustomTheme.secondaryColor),
+                  ),
                 ),
               );
             }),
@@ -445,5 +450,12 @@ class _CustomCameraState extends State<CustomCamera>
 
   double _closeIconSize(Orientation orientation) {
     return orientation == Orientation.landscape ? 10.w : 23.w;
+  }
+
+  bool get _isTablet {
+    final firstView = WidgetsBinding.instance.platformDispatcher.views.first;
+    final logicalShortestSide =
+        firstView.physicalSize.shortestSide / firstView.devicePixelRatio;
+    return logicalShortestSide > 600;
   }
 }
