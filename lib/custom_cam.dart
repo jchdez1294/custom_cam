@@ -216,13 +216,14 @@ class _CustomCameraState extends State<CustomCamera>
     }
     try {
       // lockDeviceOrientation();
+
       await cameraController.setFlashMode(FlashMode.off);
-      XFile picture = await cameraController.takePicture();
-      goToPreview(picture.path, false);
     } on CameraException catch (e) {
       debugPrint('Error occurred while taking picture: $e');
-      return;
+      //return;
     }
+    XFile picture = await cameraController.takePicture();
+    goToPreview(picture.path, false);
   }
 
   Future<void> startVideoRecording() async {
