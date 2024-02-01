@@ -79,10 +79,16 @@ class _CameraPreviewState extends State<CameraPreview> {
       child: Stack(
         children: [
           !widget.multimediaItem.isVideo
-              ? SizedBox(
+              ? Container(
                   width: double.infinity,
                   height: double.infinity,
-                  child: Image.file(File(widget.multimediaItem.path)))
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: Image.file(File(widget.multimediaItem.path)).image,
+                    ),
+                  ),
+                )
               : SizedBox(
                   width: double.infinity,
                   height: double.infinity,
@@ -213,7 +219,7 @@ class _CameraPreviewState extends State<CameraPreview> {
                             Radius.circular(25.sp),
                           ),
                           border: Border.all(
-                            color: CustomTheme.backgroundColor,
+                            color: CustomTheme.primaryColor,
                             width: 2.0,
                           ),
                         ),
