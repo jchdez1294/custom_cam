@@ -3,13 +3,14 @@ import 'dart:io';
 import 'package:custom_cam/src/custom_icons_icons.dart';
 import 'package:custom_cam/src/multimedia_item.dart';
 import 'package:custom_cam/src/custom_theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 
-import 'camera_alert.dart';
+// import 'camera_alert.dart';
 
 class CameraPreview extends StatefulWidget {
   final MultimediaItem multimediaItem;
@@ -110,36 +111,40 @@ class _CameraPreviewState extends State<CameraPreview> {
                 _isTablet ? const EdgeInsets.all(25) : const EdgeInsets.all(0),
             child: Align(
               alignment: Alignment.topRight,
-              child: IconButton(
-                  onPressed: () {
-                    exitCallback() {
-                      SystemChrome.setPreferredOrientations([
-                        DeviceOrientation.portraitUp,
-                        DeviceOrientation.portraitDown,
-                      ]);
-                      Navigator.of(context)
-                        ..pop()
-                        ..pop();
-                    }
+              child: CupertinoButton(
+                onPressed: () {
+                  //exitCallback() {
+                    SystemChrome.setPreferredOrientations([
+                      DeviceOrientation.portraitUp,
+                      DeviceOrientation.portraitDown,
+                    ]);
+                    Navigator.of(context)
+                      ..pop()
+                      ..pop();
+                  // }
 
-                    CameraAlert exitAlert = CameraAlert(
-                      title: 'Salir de fotografías',
-                      description:
-                          'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
-                      positiveInput: 'Salir',
-                      negativeInput: 'Volver',
-                      positiveCallback: exitCallback,
-                      orientation: Orientation.portrait,
-                    );
-                    showDialog(
-                      context: context,
-                      builder: (_) {
-                        return exitAlert;
-                      },
-                    );
-                  },
-                  icon: Icon(CustomIcons.close, size: 23.w),
-                  color: CustomTheme.secondaryColor),
+                  // CameraAlert exitAlert = CameraAlert(
+                  //   title: 'Salir de fotografías',
+                  //   description:
+                  //       'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
+                  //   positiveInput: 'Salir',
+                  //   negativeInput: 'Volver',
+                  //   positiveCallback: exitCallback,
+                  //   orientation: Orientation.portrait,
+                  // );
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (_) {
+                  //     return exitAlert;
+                  //   },
+                  // );
+                },
+                child: Icon(
+                  CustomIcons.close,
+                  size: 23.w,
+                  color: CustomTheme.secondaryColor,
+                ),
+              ),
             ),
           ),
           OrientationBuilder(
@@ -160,9 +165,24 @@ class _CameraPreviewState extends State<CameraPreview> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        width: 250.w,
-                        child: TextButton(
+                      Container(
+                        width: 200.w,
+                        height: 55.h,
+                        decoration: BoxDecoration(
+                          color: CustomTheme.backgroundColor,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(25.sp),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF9B9B9B),
+                              blurRadius: 12.sp,
+                              offset: const Offset(4, 8),
+                            ),
+                          ],
+                        ),
+                        child: CupertinoButton(
+                          padding: EdgeInsets.zero,
                           onPressed: () {
                             saveToDocuments();
                             SystemChrome.setPreferredOrientations([
@@ -171,33 +191,45 @@ class _CameraPreviewState extends State<CameraPreview> {
                             ]);
                             Navigator.of(context).pop(widget.multimediaItem);
                           },
-                          style: CustomTheme.textButtonStyle,
                           child: Padding(
                             padding: const EdgeInsets.all(6.0),
                             child: Text(
-                              'Guardar',
+                              'Utilizar',
                               style: TextStyle(
-                                  fontSize: 14.sp, fontWeight: FontWeight.w700),
+                                  fontSize: 16.sp, fontWeight: FontWeight.w700),
                             ),
                           ),
                         ),
                       ),
-                      TextButton(
-                        onPressed: () async {
-                          SystemChrome.setPreferredOrientations([
-                            DeviceOrientation.landscapeRight,
-                            DeviceOrientation.landscapeLeft,
-                            DeviceOrientation.portraitUp,
-                            DeviceOrientation.portraitDown,
-                          ]);
-                          Navigator.of(context).pop();
-                        },
-                        style: TextButton.styleFrom(
-                            foregroundColor: CustomTheme.primaryColor),
-                        child: Text(
-                          'Volver a tomar',
-                          style: TextStyle(
-                              fontSize: 14.sp, fontWeight: FontWeight.w700),
+                      SizedBox(height: 5.h),
+                      Container(
+                        width: 200.w,
+                        height: 55.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(25.sp),
+                          ),
+                          border: Border.all(
+                            color: CustomTheme.backgroundColor,
+                            width: 2.0,
+                          ),
+                        ),
+                        child: CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () async {
+                            SystemChrome.setPreferredOrientations([
+                              DeviceOrientation.landscapeRight,
+                              DeviceOrientation.landscapeLeft,
+                              DeviceOrientation.portraitUp,
+                              DeviceOrientation.portraitDown,
+                            ]);
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            'Volver a tomar',
+                            style: TextStyle(
+                                fontSize: 16.sp, fontWeight: FontWeight.w700),
+                          ),
                         ),
                       ),
                     ],

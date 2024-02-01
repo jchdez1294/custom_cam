@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:custom_cam/src/custom_icons_icons.dart';
 import 'package:custom_cam/src/camera_alert.dart';
 import 'package:custom_cam/src/custom_theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '/src/multimedia_item.dart';
 import 'package:flutter/material.dart';
@@ -274,8 +275,8 @@ class _CustomCameraState extends State<CustomCamera>
   Widget _getVideoControls() {
     return widget.isRecordingEnabled
         ? Expanded(
-            child: TextButton(
-              style: CustomTheme.circularButtonStyle,
+            child: CupertinoButton(
+              //style: CustomTheme.circularButtonStyle,
               onPressed: () {
                 setState(() => _isVideoMode = !_isVideoMode);
               },
@@ -308,25 +309,27 @@ class _CustomCameraState extends State<CustomCamera>
                   alignment: orientation == Orientation.portrait
                       ? Alignment.topRight
                       : Alignment.topLeft,
-                  child: IconButton(
+                  child: CupertinoButton(
                     onPressed: () {
-                      exitCallback() => {Navigator.of(context).pop()};
-                      CameraAlert exitAlert = CameraAlert(
-                        title: 'Salir de fotografías',
-                        description:
-                            'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
-                        positiveInput: 'Salir',
-                        negativeInput: 'Volver',
-                        positiveCallback: exitCallback,
-                        orientation: orientation,
-                      );
-                      showDialog(
-                          context: context,
-                          builder: (_) {
-                            return exitAlert;
-                          });
+                      //exitCallback() => {
+                      Navigator.of(context).pop();
+                      //};
+                      // CameraAlert exitAlert = CameraAlert(
+                      //   title: 'Salir de fotografías',
+                      //   description:
+                      //       'Al salir perderá la información ingresada y no podrá recuperarla. ¿Desea continuar?',
+                      //   positiveInput: 'Salir',
+                      //   negativeInput: 'Volver',
+                      //   positiveCallback: exitCallback,
+                      //   orientation: orientation,
+                      // );
+                      // showDialog(
+                      //     context: context,
+                      //     builder: (_) {
+                      //       return exitAlert;
+                      //     });
                     },
-                    icon: Icon(CustomIcons.close,
+                    child: Icon(CustomIcons.close,
                         size: _closeIconSize(orientation),
                         color: CustomTheme.secondaryColor),
                   ),
@@ -402,7 +405,10 @@ class _CustomCameraState extends State<CustomCamera>
     final CameraController? cameraController = controller;
 
     if (cameraController == null || !cameraController.value.isInitialized) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+          child: CircularProgressIndicator(
+        color: Color(0xFF049A97),
+      ));
     } else {
       return Listener(
         onPointerDown: (_) => _pointers++,
