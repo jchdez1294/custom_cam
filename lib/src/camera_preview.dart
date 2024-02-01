@@ -172,7 +172,7 @@ class _CameraPreviewState extends State<CameraPreview> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: 200.w,
+                        width: 230.w,
                         height: 55.h,
                         decoration: BoxDecoration(
                           color: CustomTheme.primaryColor,
@@ -210,9 +210,9 @@ class _CameraPreviewState extends State<CameraPreview> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 5.h),
+                      SizedBox(height: 10.h),
                       Container(
-                        width: 200.w,
+                        width: 230.w,
                         height: 55.h,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
