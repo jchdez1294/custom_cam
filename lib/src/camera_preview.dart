@@ -114,13 +114,13 @@ class _CameraPreviewState extends State<CameraPreview> {
               child: CupertinoButton(
                 onPressed: () {
                   //exitCallback() {
-                    SystemChrome.setPreferredOrientations([
-                      DeviceOrientation.portraitUp,
-                      DeviceOrientation.portraitDown,
-                    ]);
-                    Navigator.of(context)
-                      ..pop()
-                      ..pop();
+                  SystemChrome.setPreferredOrientations([
+                    DeviceOrientation.portraitUp,
+                    DeviceOrientation.portraitDown,
+                  ]);
+                  Navigator.of(context)
+                    ..pop()
+                    ..pop();
                   // }
 
                   // CameraAlert exitAlert = CameraAlert(
@@ -169,7 +169,7 @@ class _CameraPreviewState extends State<CameraPreview> {
                         width: 200.w,
                         height: 55.h,
                         decoration: BoxDecoration(
-                          color: CustomTheme.backgroundColor,
+                          color: CustomTheme.primaryColor,
                           borderRadius: BorderRadius.all(
                             Radius.circular(25.sp),
                           ),
@@ -196,7 +196,10 @@ class _CameraPreviewState extends State<CameraPreview> {
                             child: Text(
                               'Utilizar',
                               style: TextStyle(
-                                  fontSize: 16.sp, fontWeight: FontWeight.w700),
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
@@ -228,7 +231,10 @@ class _CameraPreviewState extends State<CameraPreview> {
                           child: Text(
                             'Volver a tomar',
                             style: TextStyle(
-                                fontSize: 16.sp, fontWeight: FontWeight.w700),
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w700,
+                              color: CustomTheme.primaryColor,
+                            ),
                           ),
                         ),
                       ),
