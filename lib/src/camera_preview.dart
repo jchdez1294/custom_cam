@@ -173,7 +173,7 @@ class _CameraPreviewState extends State<CameraPreview> {
                     children: [
                       Container(
                         width: 230.w,
-                        height: 55.h,
+                        height: 50.h,
                         decoration: BoxDecoration(
                           color: CustomTheme.primaryColor,
                           borderRadius: BorderRadius.all(
@@ -210,10 +210,10 @@ class _CameraPreviewState extends State<CameraPreview> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10.h),
+                      SizedBox(height: 15.h),
                       Container(
                         width: 230.w,
-                        height: 55.h,
+                        height: 50.h,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
                             Radius.circular(25.sp),
